@@ -15,7 +15,7 @@ class GeminiFormatter:
         """Use Gemini for text formatting and refinement"""
         response = model.generate_content(f"""
         Format this text into clean paragraphs with proper line breaks and punctuation.
-        Preserve all original content while fixing formatting issues:
+        Preserve all original content while fixing formatting issues, DO NOT REMOVE ANY ORIGINAL TEXT:
         
         {text}
         """)
