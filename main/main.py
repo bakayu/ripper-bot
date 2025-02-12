@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, app_commands
 from utils.discord_helpers import fetch_message_images
 from utils.ocr_processor import process_images_to_text
 from utils.pdf_builder import create_pdf
@@ -14,6 +14,8 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 
 @bot.tree.command(name="rip", description="images to PDF")
+# Requires mod permissions
+@app_commands.checks.has_permissions(manage_messages=True)
 async def convert(
     interaction: discord.Interaction,
     message_id: str,
@@ -51,6 +53,8 @@ async def convert(
         os.remove(pdf_path)
         os.remove(txt_path)
 
+    except app_commands.errors.MissingPermissions:
+        await interaction.response.send_message("You need moderator permissions to use this command.", ephemeral=True)
     except Exception as e:
         await interaction.followup.send(f"Error: {str(e)}")
 
