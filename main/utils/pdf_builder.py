@@ -15,7 +15,7 @@ class GeminiFormatter:
         """Use Gemini for text formatting and refinement"""
         response = model.generate_content(f"""
         Format this text into clean paragraphs with proper line breaks and punctuation.
-        Preserve all original content:
+        Preserve all original content (output should not be in italics):
         
         {text}
         """)
@@ -68,7 +68,7 @@ def create_pdf(text_contents, output_path):
             # Handle long words by using justified alignment
             pdf.set_font_size(11)
             pdf.set_x(20)  # Reset x position
-            pdf.multi_cell(0, 6, paragraph.strip(), align='L',
+            pdf.multi_cell(0, 6, paragraph.strip(), align='J',
                            border=0, markdown=False)
             pdf.ln(4)
 
