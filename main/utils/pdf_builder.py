@@ -49,7 +49,7 @@ class NoMetaPDF(FPDF):
 def create_pdf(text_contents, output_path):
     """Create PDF using Gemini-formatted text"""
     formatter = GeminiFormatter()
-    print(text_contents)
+    # print(text_contents)
     formatted_text = formatter.format_text("\n".join(text_contents))
 
     pdf = NoMetaPDF()
@@ -61,7 +61,7 @@ def create_pdf(text_contents, output_path):
 
     for paragraph in formatted_text.split('\n\n'):
         if paragraph.strip():
-            print(paragraph, '\n')
+            # print(paragraph, '\n')
             # Set alignment based on content length
             pdf.set_font('NotoSans', size=11)  # Slightly reduce font size
 

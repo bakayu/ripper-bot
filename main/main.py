@@ -54,7 +54,7 @@ async def convert(
         os.remove(pdf_path)
         os.remove(txt_path)
 
-    except app_commands.errors.MissingPermissions:
+    except discord.app_commands.errors.MissingPermissions:
         await interaction.response.send_message("You need moderator permissions to use this command.", ephemeral=True)
     except Exception as e:
         await interaction.followup.send(f"Error: {str(e)}")
