@@ -19,7 +19,6 @@ async def convert(
     message_id: str,
     filename: str = "output"
 ):
-    """Convert message images to OCR using message ID"""
     try:
         await interaction.response.defer()
 
@@ -32,11 +31,14 @@ async def convert(
 
         ocr_results = await process_images_to_text(images)
         pdf_path = f"{filename}.pdf"
-        create_pdf(ocr_results, pdf_path)
+        formatted_text = create_pdf(ocr_results, pdf_path)
 
-        await interaction.followup.send(file=discord.File(pdf_path))
+        # Send both PDF and formatted text
+        await interaction.followup.send(
+            content=f"```\n{formatted_text}\n```",
+            file=discord.File(pdf_path)
+        )
         os.remove(pdf_path)
-        print(f"{filename}.pdf created and uploaded successfully")
 
     except Exception as e:
         await interaction.followup.send(f"Error: {str(e)}")

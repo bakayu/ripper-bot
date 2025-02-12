@@ -73,3 +73,4 @@ def create_pdf(text_contents, output_path):
             pdf.ln(4)
 
     pdf.output(output_path)
+    return formatted_text
