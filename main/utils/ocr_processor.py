@@ -16,8 +16,8 @@ async def process_single_image(image_data):
         image = Image.open(io.BytesIO(image_data))
 
         # Preprocess image
-        image = image.convert('L')  # Convert to grayscale
-        image = ImageOps.autocontrast(image)  # Improve contrast
+        # image = image.convert('L')  # Convert to grayscale
+        # image = ImageOps.autocontrast(image)  # Improve contrast
 
         custom_config = r'''
             --oem 3 --psm 11
