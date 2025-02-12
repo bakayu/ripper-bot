@@ -59,9 +59,6 @@ def create_pdf(text_contents, output_path):
     pdf.set_margins(20, 15, 20)
     pdf.set_auto_page_break(True, margin=15)
 
-    # Get page width excluding margins
-    effective_width = pdf.w - 2 * pdf.l_margin
-
     for paragraph in formatted_text.split('\n\n'):
         if paragraph.strip():
             print(paragraph, '\n')
@@ -71,7 +68,7 @@ def create_pdf(text_contents, output_path):
             # Handle long words by using justified alignment
             pdf.set_font_size(11)
             pdf.set_x(20)  # Reset x position
-            pdf.multi_cell(0, 6, paragraph.strip(), align='J')
+            pdf.multi_cell(0, 6, paragraph.strip(), align='L', border=0)
             pdf.ln(4)
 
     pdf.output(output_path)

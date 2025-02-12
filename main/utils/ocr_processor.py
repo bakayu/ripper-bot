@@ -16,8 +16,8 @@ async def process_single_image(image_data):
         image = Image.open(io.BytesIO(image_data))
 
         # Preprocess image
-        # image = image.convert('L')  # Convert to grayscale
-        # image = ImageOps.autocontrast(image)  # Improve contrast
+        image = image.convert('L')  # Convert to grayscale
+        image = ImageOps.autocontrast(image)  # Improve contrast
 
         custom_config = r'''
             --oem 3 --psm 11
@@ -26,6 +26,7 @@ async def process_single_image(image_data):
             textord_min_space_size=20  # Minimum pixel gap between words
             textord_heavy_nr=1  # Aggressive noise removal
             thresholding_method=2  # Automatic adaptive threshold
+            tessedit_write_params_to_file=
         '''
 
         text = await asyncio.to_thread(
