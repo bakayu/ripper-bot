@@ -1,5 +1,5 @@
 import pytesseract
-from PIL import Image
+from PIL import Image, ImageOps
 import io
 import asyncio
 
@@ -14,6 +14,10 @@ async def process_single_image(image_data):
     """Enhanced OCR processing with AI components"""
     try:
         image = Image.open(io.BytesIO(image_data))
+
+        # Preprocess image
+        image = image.convert('L')  # Convert to grayscale
+        image = ImageOps.autocontrast(image)  # Improve contrast
 
         custom_config = r'''
             --oem 3 --psm 11

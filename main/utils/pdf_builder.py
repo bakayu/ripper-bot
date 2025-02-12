@@ -36,7 +36,7 @@ class NoMetaPDF(FPDF):
         self.set_creation_date(datetime(2000, 1, 1, 0, 0))
 
         self.add_font('NotoSans', '',
-                      '/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf', uni=True)
+                      '/usr/share/fonts/noto/NotoSans-Regular.ttf', uni=True)
         self.set_font('NotoSans', size=11)
         self.set_margins(20, 15, 20)
         self.set_auto_page_break(True, margin=15)
