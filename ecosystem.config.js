@@ -1,6 +1,6 @@
 module.exports = {
     apps: [{
-        name: "discord-ripper-bot",
+        name: "rbot",
         script: "./run.sh",
         watch: false,
         env: {
