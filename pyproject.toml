@@ -14,6 +14,8 @@ pillow = "^11.1.0"
 fpdf2 = "^2.8.2"
 httpx = "^0.28.1"
 python-dotenv = "^1.0.1"
+pyphen = "^0.17.2"
+google-generativeai = "^0.8.4"
 
 
 [build-system]
