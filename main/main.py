@@ -1,5 +1,6 @@
 import discord
-from discord.ext import commands, app_commands
+from discord.ext import commands
+from discord import app_commands
 from utils.discord_helpers import fetch_message_images
 from utils.ocr_processor import process_images_to_text
 from utils.pdf_builder import create_pdf
