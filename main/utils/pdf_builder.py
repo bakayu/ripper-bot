@@ -68,7 +68,8 @@ def create_pdf(text_contents, output_path):
             # Handle long words by using justified alignment
             pdf.set_font_size(11)
             pdf.set_x(20)  # Reset x position
-            pdf.multi_cell(0, 6, paragraph.strip(), align='L', border=0)
+            pdf.multi_cell(0, 6, paragraph.strip(), align='L',
+                           border=0, markdown=False)
             pdf.ln(4)
 
     pdf.output(output_path)
