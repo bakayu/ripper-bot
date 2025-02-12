@@ -49,6 +49,7 @@ class NoMetaPDF(FPDF):
 def create_pdf(text_contents, output_path):
     """Create PDF using Gemini-formatted text"""
     formatter = GeminiFormatter()
+    print(text_contents)
     formatted_text = formatter.format_text("\n".join(text_contents))
 
     pdf = NoMetaPDF()
