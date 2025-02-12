@@ -31,14 +31,25 @@ async def convert(
 
         ocr_results = await process_images_to_text(images)
         pdf_path = f"{filename}.pdf"
+        txt_path = f"{filename}.txt"
+
         formatted_text = create_pdf(ocr_results, pdf_path)
 
-        # Send both PDF and formatted text
+        # Save formatted text to .txt file
+        with open(txt_path, 'w', encoding='utf-8') as f:
+            f.write(formatted_text)
+
+        # Send both files
         await interaction.followup.send(
-            content=f"```\n{formatted_text}\n```",
-            file=discord.File(pdf_path)
+            files=[
+                discord.File(pdf_path),
+                discord.File(txt_path)
+            ]
         )
+
+        # Cleanup
         os.remove(pdf_path)
+        os.remove(txt_path)
 
     except Exception as e:
         await interaction.followup.send(f"Error: {str(e)}")
