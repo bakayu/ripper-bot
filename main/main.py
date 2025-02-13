@@ -45,13 +45,13 @@ async def convert(
         # Send both files
         await interaction.followup.send(
             files=[
-                discord.File(pdf_path),
+                # discord.File(pdf_path),
                 discord.File(txt_path)
             ]
         )
 
         # Cleanup
-        os.remove(pdf_path)
+        # os.remove(pdf_path)
         os.remove(txt_path)
 
     except discord.app_commands.errors.MissingPermissions:
