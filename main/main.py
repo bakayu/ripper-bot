@@ -67,54 +67,54 @@ async def convert(
         await interaction.followup.send(f"Error: {str(e)}")
 
 
-@bot.tree.command(name="jack", description="Convert txt file to epub")
-@app_commands.checks.has_permissions(manage_messages=True)
-async def jack_convert(
-    interaction: discord.Interaction,
-    message_id: str
-):
-    try:
-        await interaction.response.defer()
+# @bot.tree.command(name="jack", description="Convert txt file to epub")
+# @app_commands.checks.has_permissions(manage_messages=True)
+# async def jack_convert(
+#     interaction: discord.Interaction,
+#     message_id: str
+# ):
+#     try:
+#         await interaction.response.defer()
 
-        msg_id = int(message_id)
-        message = await interaction.channel.fetch_message(msg_id)
+#         msg_id = int(message_id)
+#         message = await interaction.channel.fetch_message(msg_id)
 
-        if not message.attachments:
-            await interaction.followup.send("No attachments found in the specified message")
-            return
+#         if not message.attachments:
+#             await interaction.followup.send("No attachments found in the specified message")
+#             return
 
-        txt_file = None
-        for attachment in message.attachments:
-            if attachment.filename.lower().endswith('.txt'):
-                txt_file = attachment
-                break
+#         txt_file = None
+#         for attachment in message.attachments:
+#             if attachment.filename.lower().endswith('.txt'):
+#                 txt_file = attachment
+#                 break
 
-        if not txt_file:
-            await interaction.followup.send("No .txt file found in the specified message")
-            return
+#         if not txt_file:
+#             await interaction.followup.send("No .txt file found in the specified message")
+#             return
 
-        content = await txt_file.read()
-        txt_content = content.decode('utf-8')
+#         content = await txt_file.read()
+#         txt_content = content.decode('utf-8')
 
-        base_filename = os.path.splitext(txt_file.filename)[0]
+#         base_filename = os.path.splitext(txt_file.filename)[0]
 
-        temp_txt_path = f"{base_filename}.txt"
-        with open(temp_txt_path, 'w', encoding='utf-8') as f:
-            f.write(txt_content)
+#         temp_txt_path = f"{base_filename}.txt"
+#         with open(temp_txt_path, 'w', encoding='utf-8') as f:
+#             f.write(txt_content)
 
-        doc = aw.Document(temp_txt_path)
-        epub_path = f"{base_filename}.epub"
-        doc.save(epub_path, aw.SaveFormat.EPUB)
+#         doc = aw.Document(temp_txt_path)
+#         epub_path = f"{base_filename}.epub"
+#         doc.save(epub_path, aw.SaveFormat.EPUB)
 
-        await interaction.followup.send(file=discord.File(epub_path))
+#         await interaction.followup.send(file=discord.File(epub_path))
 
-        os.remove(temp_txt_path)
-        os.remove(epub_path)
+#         os.remove(temp_txt_path)
+#         os.remove(epub_path)
 
-    except discord.app_commands.errors.MissingPermissions:
-        await interaction.response.send_message("You need moderator permissions to use this command.", ephemeral=True)
-    except Exception as e:
-        await interaction.followup.send(f"Error: {str(e)}")
+#     except discord.app_commands.errors.MissingPermissions:
+#         await interaction.response.send_message("You need moderator permissions to use this command.", ephemeral=True)
+#     except Exception as e:
+#         await interaction.followup.send(f"Error: {str(e)}")
 
 
 @bot.event
