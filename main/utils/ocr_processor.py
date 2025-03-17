@@ -15,6 +15,17 @@ async def process_single_image(image_data):
     try:
         image = Image.open(io.BytesIO(image_data))
 
+        # Check image width and downscale if too wide
+        # (preserve height for long screenshots)
+        max_width = 1800  # Maximum width in pixels
+        if image.width > max_width:
+            # Calculate new size while maintaining aspect ratio
+            new_width = max_width
+            new_height = int(image.height * (max_width / image.width))
+
+            # Resize using high-quality downsampling
+            image = image.resize((new_width, new_height), Image.LANCZOS)
+
         # Preprocess image
         image = image.convert('L')  # Convert to grayscale
         image = ImageOps.autocontrast(image)  # Improve contrast
