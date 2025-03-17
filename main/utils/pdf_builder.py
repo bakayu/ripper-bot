@@ -4,10 +4,6 @@ import google.generativeai as genai
 import os
 from dotenv import load_dotenv
 from datetime import datetime
-from PIL import Image, ImageOps
-import pytesseract
-import asyncio
-import io
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -78,63 +74,3 @@ def create_pdf(text_contents, output_path):
 
     pdf.output(output_path)
     return formatted_text
-
-
-async def process_single_image(image_data):
-    """Enhanced OCR processing with AI components"""
-    try:
-        image = Image.open(io.BytesIO(image_data))
-
-        # Check image width and downscale if too wide
-        # (preserve height for long screenshots)
-        max_width = 1800  # Maximum width in pixels
-        if image.width > max_width:
-            # Calculate new size while maintaining aspect ratio
-            new_width = max_width
-            new_height = int(image.height * (max_width / image.width))
-
-            # Resize using high-quality downsampling
-            image = image.resize((new_width, new_height), Image.LANCZOS)
-
-        # Preprocess image
-        image = image.convert('L')  # Convert to grayscale
-        image = ImageOps.autocontrast(image)  # Improve contrast
-
-        custom_config = r'''
-            --oem 3 --psm 11
-            -c preserve_interword_spaces=1 
-            textord_space_size_is_variable=1 
-            textord_min_space_size=20  # Minimum pixel gap between words
-            textord_heavy_nr=1  # Aggressive noise removal
-            thresholding_method=2  # Automatic adaptive threshold
-            tessedit_write_params_to_file=
-        '''
-
-        text = await asyncio.to_thread(
-            pytesseract.image_to_string,
-            image,
-            lang='eng',
-            config=custom_config
-        )
-
-        return post_process_text(text)
-
-    except Exception as e:
-        raise OCRProcessingError(f"OCR failed: {str(e)}")
-
-
-def post_process_text(text):
-    """Clean up OCR output text"""
-    # Basic text cleanup
-    text = text.strip()
-    # Remove multiple consecutive whitespaces
-    import re
-    text = re.sub(r'\s+', ' ', text)
-    # Remove non-printable characters
-    text = ''.join(c if c.isprintable() or c == '\n' else ' ' for c in text)
-    return text
-
-
-class OCRProcessingError(Exception):
-    """Exception raised for errors in OCR processing"""
-    pass
