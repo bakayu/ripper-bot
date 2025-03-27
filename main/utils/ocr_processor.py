@@ -28,7 +28,7 @@ async def process_single_image(image_data):
         image = ImageOps.autocontrast(image)  # Improve contrast
 
         # Simplified config with special character support
-        custom_config = '--oem 3 --psm 6 -c tessedit_char_whitelist="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,!?()@:;\'\"\\-—_*$#%&+=/<> "'
+        custom_config = r'--oem 3 --psm 6'
 
         text = await asyncio.to_thread(
             pytesseract.image_to_string,
