@@ -16,29 +16,19 @@ async def process_single_image(image_data):
         image = Image.open(io.BytesIO(image_data))
 
         # Check image width and downscale if too wide
-        # (preserve height for long screenshots)
         max_width = 1800  # Maximum width in pixels
         if image.width > max_width:
             # Calculate new size while maintaining aspect ratio
             new_width = max_width
             new_height = int(image.height * (max_width / image.width))
-
-            # Resize using high-quality downsampling
             image = image.resize((new_width, new_height), Image.LANCZOS)
 
         # Preprocess image
         image = image.convert('L')  # Convert to grayscale
         image = ImageOps.autocontrast(image)  # Improve contrast
 
-        custom_config = r'''
-            --oem 3 --psm 11
-            -c preserve_interword_spaces=1 
-            textord_space_size_is_variable=1 
-            textord_min_space_size=20  # Minimum pixel gap between words
-            textord_heavy_nr=1  # Aggressive noise removal
-            thresholding_method=2  # Automatic adaptive threshold
-            tessedit_write_params_to_file=
-        '''
+        # Simplified config with special character support
+        custom_config = '--oem 3 --psm 6 -c tessedit_char_whitelist="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,!?()@:;\'\"\\-—_*$#%&+=/<> "'
 
         text = await asyncio.to_thread(
             pytesseract.image_to_string,
@@ -54,7 +44,20 @@ async def process_single_image(image_data):
 
 
 def post_process_text(text):
-    """ripped by jack"""
+    """Clean and correct OCR output"""
+    import re
+
+    # Fix common asterisk misreadings
+    text = re.sub(r'\bseek\b', '***', text)
+    text = re.sub(r'\beek\b', '***', text)
+    text = re.sub(r'\bkkk\b', '***', text)
+
+    # Fix spaces around asterisks
+    text = re.sub(r'\s*\*\s*\*\s*\*\s*', ' *** ', text)
+
+    # Fix consecutive asterisks
+    text = re.sub(r'\*(\s*\*)+', '***', text)
+
     return text.strip()
 
 
